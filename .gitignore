@@ -1,0 +1,37 @@
+# Virtual environments
+venv/
+env/
+/.venv/
+/.env/
+
+# Editor and IDE files
+.idea/
+.vscode/
+*.pyc
+
+# Build and compiled files
+/build/
+/dist/
+/__pycache__/
+*.egg-info/
+
+# Sensitive or confidential information
+/config.py
+/secrets.cfg
+/credentials.json
+
+# Logs and temporary files
+/logs/
+/tmp/
+
+# Generated files or directories
+/static/uploads/
+/generated/
+
+# Database files
+/db.sqlite
+/data/
+
+# Include necessary configuration files
+!config.py
+
