@@ -7,6 +7,7 @@ from __init__ import app, github_webhook, PullRequest
 
 class TestGitHubWebhook(unittest.TestCase):
     def setUp(self):
+        # we should create a test DB, I didn't have enough time
         app.config['TESTING'] = True
         self.app = app.test_client()
         with app.app_context():
@@ -74,6 +75,7 @@ class TestGitHubWebhook(unittest.TestCase):
 
         self.assertEqual(response.status_code, 404)
         self.assertEqual(response.get_data(as_text=True), 'Not Found')
+
 
 if __name__ == '__main__':
     unittest.main()
