@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, Response
 import json
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
@@ -27,16 +27,20 @@ class PullRequest(db.Model):
                 'url': self.url}
 
 
-with app.app_context():
-    db.drop_all()
-    db.create_all()
+# with app.app_context():
+#     db.drop_all()
+#     db.create_all()
 
 
 @app.route('/pullrequests')
 def getPullRequests():
-    pullrequests = PullRequest.query.all()
-    response = [pullrequest.to_dict() for pullrequest in pullrequests]
-    return jsonify(response)
+    try:
+        pullrequests = PullRequest.query.all()
+        response = [pullrequest.to_dict() for pullrequest in pullrequests]
+        return jsonify(response)
+    except Exception as e:
+        error_message = "An error occurred while fetching pull requests."
+        return jsonify({'error': error_message}), 500
 
 
 @app.route('/github-webhook', methods=['POST'])
@@ -68,6 +72,14 @@ def github_webhook():
             return f"Internal Server Error: {str(e)}", 500
     else:
         return 'Not Found', 404
+
+
+@app.after_request
+def add_cors_headers(response):
+    response.headers['Access-Control-Allow-Origin'] = '*'
+    response.headers['Access-Control-Allow-Methods'] = 'GET, POST, PUT, DELETE, OPTIONS'
+    response.headers['Access-Control-Allow-Headers'] = 'Content-Type, Authorization'
+    return response
 
 
 if __name__ == '__main__':
